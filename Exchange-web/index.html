@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <style>
+    .completed {
+      background-color: lightgreen;
+    }
+
+    .not-completed {
+      background-color: lightcoral;
+    }
+
+    .task {
+      margin: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      display: none; /* Kartları başlangıçta gizle */
+    }
+  </style>
+</head>
+<body>
+
+  <div id="todo-list"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      var todoListUrl = 'https://jsonplaceholder.typicode.com/todos';
+
+      $.ajax({
+        url: todoListUrl,
+        method: 'GET',
+        success: function(data) {
+          displayTodoList(data);
+        },
+        error: function(error) {
+          console.error('Error fetching todo list:', error);
+        }
+      });
+
+      function displayTodoList(todoList) {
+        var $todoListContainer = $('#todo-list');
+        var i =1;
+        todoList.forEach(function(todo) {
+          var $task = $('<div>').addClass('task');
+          $task.text(todo.title);
+
+          if (todo.completed) {
+            $task.addClass('completed');
+          } else {
+            $task.addClass('not-completed');
+          }
+
+          $todoListContainer.append($task);
+          i++;
+          // Animasyonlu görüntüleme
+          $task.fadeIn(100*i); // 1000 milisaniye (1 saniye) süren bir fadeIn animasyonu
+        });
+      }
+    });
+  </script>
+</body>
+</html>
